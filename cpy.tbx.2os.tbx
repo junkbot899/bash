@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+repo_tools="/mnt/x/core/repos/bash_junkbot899"
+dir_tools="/usr/local/bin"
+list_tools_to_keep="${dir_tools}/tbx.del.not.tbx"
+
+cpy.tbx.2os () {
+
+	echo "cpy.tbx.2os.tbx: CoPY TooBoX 2 Operating System:"
+	declare -a exclude_rules=(-wholename "${0}")
+	declare -a tools_to_keep=()
+	echo "Read: ${list_tools_to_keep}"
+	if [ -e "${list_tools_to_keep}" ]; then
+		mapfile -t tools_to_keep < <(grep -v '^$' "${list_tools_to_keep}" | tr -d '\r')
+	fi
+
+	echo "Keeping: ${dir_tools}"
+	for tool in "${tools_to_keep[@]}"; do
+		echo " - ${tool}"
+		exclude_rules+=(-o -name "${tool}")
+	done
+
+	echo "Delete: ${dir_tools}: .tbx (not keeping)"
+	eval "sudo find \"${dir_tools}\" -type f -name \"*.tbx\" ! \( ${exclude_rules[@]} \) -exec rm -v {} + > /dev/null"
+	echo "Copying: bash script tools from '${repo_tools}' to '${dir_tools}'"
+	sudo find "${repo_tools}" -maxdepth 1 -type f -name "*.tbx" -exec cp {} "${dir_tools}" \;
+}
+
+cpy.tbx.2os

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+declare -a wsl_permissions_fix=("" "[automount]" "enabled = true" "root = /mnt/" "options = \"metadata,umask=022\"")
+file_wsl_config="/etc/wsl.conf"
+
+wsl_permissions_fix_exists () {
+	wsl_permissions_fix_content=$(printf "%s\n" "${wsl_permissions_fix[@]}" | tr -d '[:space:]')
+	file_wsl_config_content=$(tr -d '[:space:]' < "$file_wsl_config")
+	if grep -qF "$wsl_permissions_fix_content" <<< "$file_wsl_config_content"; then
+	    return 0
+	else
+		return 1
+	fi
+}
+
+wsl.per.fix () {
+
+	if [ ! -n "${SUDO_USER}" ]; then
+		echo -e "\e[91mProblem\e[0m: did not run '${0}' with sudo"
+		exit
+	fi
+
+	echo
+	echo -e "\e[91mRun\e[0m: 'mount | grep /mnt' (if disk info is missing umask=022, that could be the problem!)"
+	mount | grep /mnt
+	echo
+	if wsl_permissions_fix_exists; then
+		echo -e "\e[91mDetected\e[0m: WSL permisions fix."
+		echo "File: '${file_wsl_config}' contains:"
+		for fix in "${wsl_permissions_fix[@]}"; do
+			echo " - ${fix}"
+		done
+		echo -e "\e[91mSuggestion\e[0m: If changing permissions is still not working, investigate another possibility."
+	else
+		(IFS=$'\n'; echo "${wsl_permissions_fix[*]}") >> "${file_wsl_config}"
+		echo -e "\e[91mUpdated\e[0m: ${file_wsl_config} with WSL permissions fix"
+		echo
+		echo -e "\e[91mAction\e[0m: For changes to take affect, log out of WSL and run 'wsl --shutdown' (cmd / ps)"
+		echo
+	fi
+}
+
+wsl.per.fix

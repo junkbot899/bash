@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+help () {
+	echo 
+	echo "grr: Git Repo Rapid:"
+	echo
+	echo "DESCRIPTION:"
+	echo "Git add, commit push as 1-liner."
+	echo
+	echo "USAGE:"
+	echo "\${1}: commit message."
+	echo "\${2}: branch"
+	echo
+	exit
+}
+
+grr () {
+
+	if [ -z "${1}" ] || [ -z "${2}" ]; then
+		help
+	fi
+
+	git add .
+	git commit -am "${1}"
+	git push origin "${2}"
+}
+
+grr "${1}" "${2}"

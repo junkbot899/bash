@@ -5,6 +5,7 @@ repo_python_packages="packages_junkbot899"
 path_repo_python_packages="${dir_python_packages}/${repo_python_packages}"
 ssh_repo="git@github.com:junkbot899/packages_junkbot899.git"
 branch_python_packages_use="release"
+url_packages="https://github.com/junkbot899/packages_junkbot899"
 
 dir_python_packages_found () {
 	local result=$(find "${dir_python_packages}" -maxdepth 1 -type d -name "${repo_python_packages}" -print -quit)
@@ -30,9 +31,10 @@ help () {
 	echo
 	echo "DESCRIPTION:"
 	echo "Adds a python package to system from repo."
+	echo -e "\e[91mMandatory\e[0m: Must be run within a virtual environment!"
 	echo
 	echo "USAGE:"
-	echo "\${1}: full name of package (as seen in repo)"
+	echo "\${1}: full name of package (as seen in ${url_packages})"
 	exit
 }
 
@@ -61,16 +63,39 @@ repo_python_packages_sparse_checkout_package () {
 	git checkout "${branch_python_packages_use}"
 }
 
-jpp.add () {
+repo_python_packages_pip_install_package () {
 	package="${1}"
-	if [ -z "${1}" ]; then
+	repo_python_packages_sparse_checkout_package "${package}"
+	pip install "${path_repo_python_packages}/${package}"
+}
+
+virtual_environment_activated () {
+	if [ -n "${VIRTUAL_ENV}" ]; then
+	    return 0
+	else
+	    return 1
+	fi
+}
+
+checks () {
+	if [ -z "${package}" ]; then
 		help
 	fi
+
+	if ! virtual_environment_activated; then
+		help
+	fi
+}
+
+jpp.add () {
+	package="${1}"
+	
+	checks
 
 	if dir_python_packages_found; then
 		if dir_python_packages_is_git_repo; then
 			echo "Found: ${path_repo_python_packages} package repo."
-			repo_python_packages_sparse_checkout_package "${package}"
+			repo_python_packages_pip_install_package "${package}"
 		else
 			echo "Problem: ${path_repo_python_packages} found, but not repo. please move, delete or rename"
 		fi
@@ -79,7 +104,7 @@ jpp.add () {
 		echo "Create: ${dir_python_packages}"
 		mkdir -p "${dir_python_packages}"
 		repo_python_packages_clone_no_checkout
-		repo_python_packages_sparse_checkout_package "${package}"
+		repo_python_packages_pip_install_package "${package}"
 	fi
 }
 

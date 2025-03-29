@@ -16,7 +16,6 @@ grr () {
 	fi
 
 	git add .
-	git add ../../custom_libraries/
 	git commit -am "${1}"
 	git push origin "${2}"
 }

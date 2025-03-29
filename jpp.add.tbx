@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+dir_python_packages="/mnt/x/core/lib"
+repo_python_packages="packages_junkbot899"
+path_repo_python_packages="${dir_python_packages}/${repo_python_packages}"
+ssh_repo="git@github.com:junkbot899/packages_junkbot899.git"
+branch_python_packages_use="release"
+
+dir_python_packages_found () {
+	local result=$(find "${dir_python_packages}" -maxdepth 1 -type d -name "${repo_python_packages}" -print -quit)
+
+	if [[ -n "${result}" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+dir_python_packages_is_git_repo () {
+	if git -C "${path_repo_python_packages}" rev-parse --is-inside-work-tree &>/dev/null; then
+	    return 0
+	else
+	    return 1
+	fi	
+}
+
+help () {
+	echo
+	echo "jpp.add[Junkbot899 Python Package ADD]"
+	echo
+	echo "DESCRIPTION:"
+	echo "Adds a python package to system from repo."
+	echo
+	echo "USAGE:"
+	echo "\${1}: full name of package (as seen in repo)"
+	exit
+}
+
+path_repo_python_packages_names_existing_get () {
+	package="${1}"
+	mapfile -t packages_existing < <(find "${path_repo_python_packages}" -mindepth 1 -maxdepth 1 -type d ! -name ".*" -exec basename {} \;)
+	declare -a result=()
+	for package_existing in "${packages_existing[@]}"; do
+		[[ "${package}" != "${package_existing}" ]] && result+=("$package_existing")
+	done
+	echo "${result}"
+}
+
+repo_python_packages_clone_no_checkout () {
+	echo "Cloning: ${repo_python_packages} into ${dir_python_packages}"
+	git clone --no-checkout "${ssh_repo}" "${dir_python_packages}/${repo_python_packages}"
+}
+
+repo_python_packages_sparse_checkout_package () {
+	package="${1}"
+	packages_existing=$(path_repo_python_packages_names_existing_get "${package}")
+	echo "Attempting: sparse-checkout -> ${1}"
+	cd "${path_repo_python_packages}"
+	git sparse-checkout init --cone
+	git sparse-checkout set "${packages_existing[@]}" "${package}"
+	git checkout "${branch_python_packages_use}"
+}
+
+jpp.add () {
+	package="${1}"
+	if [ -z "${1}" ]; then
+		help
+	fi
+
+	if dir_python_packages_found; then
+		if dir_python_packages_is_git_repo; then
+			echo "Found: ${path_repo_python_packages} package repo."
+			repo_python_packages_sparse_checkout_package "${package}"
+		else
+			echo "Problem: ${path_repo_python_packages} found, but not repo. please move, delete or rename"
+		fi
+	else
+		echo "Not Found: ${path_repo_python_packages}"
+		echo "Create: ${dir_python_packages}"
+		mkdir -p "${dir_python_packages}"
+		repo_python_packages_clone_no_checkout
+		repo_python_packages_sparse_checkout_package "${package}"
+	fi
+}
+
+jpp.add "${1}"

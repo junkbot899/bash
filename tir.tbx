@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-grr () {
+tir () {
 
 	echo "tir.tbx[Texas Instruments Repo]"
 
@@ -15,10 +15,11 @@ grr () {
 		exit
 	fi
 
+	cd "/mnt/x/core/ti/projects/EK-TM4C1294XL"
 	cp -r ../../custom_libraries ./custom_libraries/
 	git add .
 	git commit -am "${1}"
 	git push origin "${2}"
 }
 
-grr "${1}" "${2}" 
+tir "${1}" "${2}" 

@@ -1,0 +1,16 @@
+black=40
+grey=100
+red=41
+red_bright=101
+green=42
+green_bright=102
+yellow=43
+yellow_bright=103
+blue=44
+blue_bright=104
+magenta=45
+magenta_bright=105
+cyan=46
+cyan_bright=106
+white=47
+white_bright=107

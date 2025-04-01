@@ -7,6 +7,36 @@ ssh_repo="git@github.com:junkbot899/packages_junkbot899.git"
 branch_python_packages_use="release"
 url_packages="https://github.com/junkbot899/packages_junkbot899"
 
+format_code () {
+	input="${1}"
+	reference="/usr/local/bin/${2}"
+
+	output=""
+
+	mapfile -t options < "${reference}"
+
+	for option in "${options[@]}"; do
+		if [ "${input}" = "$(echo ${option} | tr -cd 'a-z_')" ]; then
+			output="$(echo ${option} | tr -d 'a-z[:punct:]')"
+		fi
+	done
+
+	echo "${output}"
+}
+
+text_format () {
+	text="${1}"
+	format_in="${2}"
+	foreground_in="${3}"
+	background_in="${4}"
+
+	format=$(format_code "${format_in}" "txt.fmt.tbx")
+	foreground=$(format_code "${foreground_in}" "txt.clr.tbx")
+	background=$(format_code "${background_in}" "txt.bkg.tbx")
+
+	echo -e "\e[${format:+${format};}${foreground:+${foreground};}${background}m${text}\e[0m"
+}
+
 dir_python_packages_found () {
 	local result=$(find "${dir_python_packages}" -maxdepth 1 -type d -name "${repo_python_packages}" -print -quit)
 
@@ -27,7 +57,7 @@ dir_python_packages_is_git_repo () {
 
 help () {
 	echo
-	echo "jpp.add[Junkbot899 Python Package ADD]"
+	echo "$(text_format 'jpa.pip' 'bold' 'blue_bright' 'black')[$(text_format 'J' 'bold' 'blue_bright' 'black')unkbot899 $(text_format 'P' 'bold' 'blue_bright' 'black')ackage $(text_format 'A' 'bold' 'blue_bright' 'black')dd using $(text_format 'pip' 'bold' 'blue_bright' 'black')]"
 	echo
 	echo "DESCRIPTION:"
 	echo "Adds a python package to system from repo."

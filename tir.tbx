@@ -19,7 +19,7 @@ tir () {
 	cp -r ../../custom_libraries ./custom_libraries/
 	git add .
 	git commit -am "${1}"
-	git push origin "${2}"
+	git push --set-upstream origin "${2}"
 }
 
 tir "${1}" "${2}" 

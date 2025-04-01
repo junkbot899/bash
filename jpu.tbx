@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+jpu () {
+	dir_current=$(pwd)
+	cd "/mnt/x/core/repos/packages_junkbot899"
+	git switch "main"
+	git add .
+	git commit -m "Updating Packages." "main"
+	git push --set-upstream origin "main"
+	git switch "release"
+	git merge "main"
+	git push --set-upstream origin "release"
+	git switch "main"
+	cd "/mnt/x/core/python/lib/python_packages_junkbot899"
+	git pull origin "release"
+	cd "${dir_current}"
+}
+
+jpu

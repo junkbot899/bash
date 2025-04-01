@@ -17,7 +17,7 @@ grr () {
 
 	git add .
 	git commit -am "${1}"
-	git push origin "${2}"
+	git push --set-upstream origin "${2}"
 }
 
 grr "${1}" "${2}" 

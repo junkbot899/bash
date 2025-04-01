@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-dir_python_packages="/mnt/x/core/lib"
-repo_python_packages="packages_junkbot899"
+dir_python_packages="/mnt/x/core/python/lib"
+repo_python_packages="python_packages_junkbot899"
 path_repo_python_packages="${dir_python_packages}/${repo_python_packages}"
 ssh_repo="git@github.com:junkbot899/packages_junkbot899.git"
 branch_python_packages_use="release"
@@ -61,6 +61,7 @@ repo_python_packages_sparse_checkout_package () {
 	git sparse-checkout init --cone
 	git sparse-checkout set "${packages_existing[@]}" "${package}"
 	git checkout "${branch_python_packages_use}"
+	git pull origin "${branch_python_packages_use}" 
 }
 
 repo_python_packages_pip_install_package () {

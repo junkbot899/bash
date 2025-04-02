@@ -37,6 +37,24 @@ text_format () {
 	echo -e "\e[${format:+${format};}${foreground:+${foreground};}${background}m${text}\e[0m"
 }
 
+text_colour_process () {
+	text="${1}"
+
+	echo "$(text_format ${text} 'bold' 'blue_bright' 'black')"
+}
+
+text_colour_url () {
+	text="${1}"
+
+	echo "$(text_format ${text} 'bold' 'cyan_bright' 'black')"
+}
+
+text_colour_error () {
+	text="${1}"
+
+	echo "$(text_format ${text} 'bold' 'red_bright' 'black')"
+}
+
 dir_python_packages_found () {
 	local result=$(find "${dir_python_packages}" -maxdepth 1 -type d -name "${repo_python_packages}" -print -quit)
 
@@ -57,14 +75,15 @@ dir_python_packages_is_git_repo () {
 
 help () {
 	echo
-	echo "$(text_format 'jpa.pip' 'bold' 'blue_bright' 'black')[$(text_format 'J' 'bold' 'blue_bright' 'black')unkbot899 $(text_format 'P' 'bold' 'blue_bright' 'black')ackage $(text_format 'A' 'bold' 'blue_bright' 'black')dd using $(text_format 'pip' 'bold' 'blue_bright' 'black')]"
+	echo "$(text_colour_process 'jpa.pip')[$(text_format 'J' 'bold' 'blue_bright' 'black')unkbot899 $(text_format 'P' 'bold' 'blue_bright' 'black')ackage $(text_format 'A' 'bold' 'blue_bright' 'black')dd using $(text_format 'pip' 'bold' 'blue_bright' 'black')]"
 	echo
-	echo "DESCRIPTION:"
+	echo "$(text_colour_process 'Description'):"
 	echo "Adds a python package to system from repo."
-	echo -e "\e[91mMandatory\e[0m: Must be run within a virtual environment!"
+	echo "$(text_colour_error 'Mandatory'):"
+	echo "Must be run within a python virtual environment!"
 	echo
-	echo "USAGE:"
-	echo "\${1}: full name of package (as seen in ${url_packages})"
+	echo "$(text_colour_process 'Usage'):"
+	echo "\${1}: full name of package available at $(text_colour_url ${url_packages})"
 	exit
 }
 
@@ -79,14 +98,14 @@ path_repo_python_packages_names_existing_get () {
 }
 
 repo_python_packages_clone_no_checkout () {
-	echo "Cloning: ${repo_python_packages} into ${dir_python_packages}"
+	echo "$(text_colour_process 'Cloning'): ${repo_python_packages} into ${dir_python_packages}"
 	git clone --no-checkout "${ssh_repo}" "${dir_python_packages}/${repo_python_packages}"
 }
 
 repo_python_packages_sparse_checkout_package () {
 	package="${1}"
 	packages_existing=$(path_repo_python_packages_names_existing_get "${package}")
-	echo "Attempting: sparse-checkout -> ${1}"
+	echo "$(text_colour_process 'Attempting'): sparse-checkout -> ${1}"
 	cd "${path_repo_python_packages}"
 	git sparse-checkout init --cone
 	git sparse-checkout set "${packages_existing[@]}" "${package}"
@@ -125,14 +144,14 @@ jpa.pip () {
 
 	if dir_python_packages_found; then
 		if dir_python_packages_is_git_repo; then
-			echo "Found: ${path_repo_python_packages} package repo."
+			echo "$(text_colour_process 'Found'): ${path_repo_python_packages} package repo."
 			repo_python_packages_pip_install_package "${package}"
 		else
-			echo "Problem: ${path_repo_python_packages} found, but not repo. please move, delete or rename"
+			echo "$(text_colour_error 'Problem'): ${path_repo_python_packages} found, but not repo. please move, delete or rename"
 		fi
 	else
-		echo "Not Found: ${path_repo_python_packages}"
-		echo "Create: ${dir_python_packages}"
+		echo "$(text_colour_error 'Not-Found'): ${path_repo_python_packages}"
+		echo "$(text_colour_process 'Create'): ${dir_python_packages}"
 		mkdir -p "${dir_python_packages}"
 		repo_python_packages_clone_no_checkout
 		repo_python_packages_pip_install_package "${package}"

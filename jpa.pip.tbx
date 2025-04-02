@@ -99,7 +99,7 @@ path_repo_python_packages_names_existing_get () {
 
 repo_python_packages_clone_no_checkout () {
 	echo "$(text_colour_process 'Cloning'): ${repo_python_packages} into ${dir_python_packages}"
-	git clone --no-checkout "${ssh_repo}" "${dir_python_packages}/${repo_python_packages}"
+	git clone --no-checkout -b "${branch_python_packages_use}" "${ssh_repo}" "${dir_python_packages}/${repo_python_packages}" 
 }
 
 repo_python_packages_sparse_checkout_package () {

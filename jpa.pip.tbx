@@ -104,13 +104,19 @@ repo_python_packages_clone_no_checkout () {
 
 repo_python_packages_sparse_checkout_package () {
 	package="${1}"
+	path_original=$(pwd)
 	packages_existing=$(path_repo_python_packages_names_existing_get "${package}")
 	echo "$(text_colour_process 'Attempting'): sparse-checkout -> ${1}"
 	cd "${path_repo_python_packages}"
+	# git commit -am "re/loading"
+	# git merge "${branch_python_packages_use}"
+	git clean -fd
 	git sparse-checkout init --cone
 	git sparse-checkout set "${packages_existing[@]}" "${package}"
 	git checkout "${branch_python_packages_use}"
-	git pull origin "${branch_python_packages_use}" 
+	# git pull origin "${branch_python_packages_use}" 
+	git pull 
+	cd "${path_original}"
 }
 
 repo_python_packages_pip_install_package () {

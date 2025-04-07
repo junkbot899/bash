@@ -5,11 +5,13 @@ jpu () {
 	cd "/mnt/x/core/repos/packages_junkbot899"
 	git switch "main"
 	git add .
-	git commit -m "Updating Packages." "main"
+	git commit -m "Updating Packages."
 	git push --set-upstream origin "main"
 	git switch "release"
 	git merge "main"
-	git push --set-upstream origin "release"
+	git add .
+	git commit -m "Updating Packages."
+	git push origin --set-upstream "release"
 	git switch "main"
 	cd "/mnt/x/core/python/lib/python_packages_junkbot899"
 	git pull origin "release"

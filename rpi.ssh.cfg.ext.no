@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+sudo systemctl disable ssh # prevent ssh starting at boot
+sudo systemctl stop ssh # stop ssh server
+sudo apt purge openssh-server # remove ssh server from system
+sudo apt autoremove # remove unused dependencies
+ssh-keygen -t ed25519 -C "${1}" # generate ssh keys using type ed25519 with additional comment
+eval "$(ssh-agent -s)" # start ssh agent and output commands suitable for posix shells
+ssh-add ~/.ssh/id_ed25519 # add private ssh key to ssh agent
+sudo apt update # update list of available packages
+sudo apt install ufw # install uncomplicated firewallsudo ufw enable # enable uncomplicated firewall
+sudo ufw deny ssh # block ssh with ufw, should block port 22
+sudo ufw deny 22 # block port 22 with ufw, the ssh port

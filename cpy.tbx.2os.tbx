@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-repo_tools="/mnt/x/core/repos/bash_junkbot899"
+repo_tools="/home/${USER}/repos/bash"
 dir_tools="/usr/local/bin"
 list_tools_to_keep="${dir_tools}/tbx.del.not.tbx"
 

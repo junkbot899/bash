@@ -1,22 +1,8 @@
 #!/usr/bin/env bash
 
 onx () {
-	echo "onx[OwN and eXecute] -> ${1}"
-
-	if [ -z "${1}" ]; then
-		echo "\${1}: <file-or-dir>: Not provided!"
-		exit
-	fi
-
-	permissions_octal="${2}"
-	if [ -z "${2}" ]; then
-		echo "Not Set:\${2}: permissions_octal"
-		echo "Setting: permissions_octal = 0755"
-		permissions_octal="0755"
-	fi
-
-	sudo chown "${SUDO_USER:-$USER}":"${SUDO_USER:-$USER}" -R "${1}"
-	sudo chmod "${permissions_octal}" "${1}"
+    sudo chmod 755 "${1}"
+    sudo chown "${SUDO_USER:-${USER}}":"${SUDO_USER:-${USER}}" "${1}"
 }
 
-onx "${1}" "${2}"
+onx "${1}"

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+repo_bash="/home/${USER}/repos/bash"
+dir_bash="/usr/local/bin"
+list_bash_scripts="${dir_bash}/b.keep.b"
+prefix="b.*"
+
+b_cpy_2os () {
+
+	echo "b.cpy.2os: Bash scripts Copy 2 Operating System:"
+	declare -a exclude_rules=(-wholename "${0}")
+	declare -a bash_scripts=()
+	echo "Read: ${list_bash_scripts}"
+	if [ -e "${list_bash_scripts}" ]; then
+		mapfile -t bash_scripts < <(grep -v '^$' "${list_bash_scripts}" | tr -d '\r')
+	fi
+
+	echo "Keeping: ${dir_bash}"
+	for script in "${bash_scripts[@]}"; do
+		echo " - ${script}"
+		exclude_rules+=(-o -name "${script}")
+	done
+
+	echo "Delete: ${dir_bash}: .b.sh (not keeping)"
+	eval "sudo find \"${dir_bash}\" -type f -name \"${prefix}\" ! \( ${exclude_rules[@]} \) -exec rm -v {} + > /dev/null"
+	echo "Copying: bash script scripts from '${repo_bash}' to '${dir_bash}'"
+	sudo find "${repo_bash}" -maxdepth 1 -type f -name "${prefix}" -exec cp {} "${dir_bash}" \;
+}
+
+b_cpy_2os

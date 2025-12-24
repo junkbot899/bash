@@ -1,0 +1,20 @@
+ESP32 config
+
+disable external ssh
+generate ssh key ed25519
+copy ssh pub key into git
+check the git connection
+clone esp32 repo (recursively)
+git clone --recursive https://github.com/espressif/esp-idf.git
+cd ./esp-idf
+./install.sh
+. ./export.sh should fail
+
+then try these 1 at a time to see what was the actual fix
+1: install ffi
+2: do esp32 fix with ruamel.yaml.clib
+3: set swap size
+
+then esp32 config on py should work
+
+

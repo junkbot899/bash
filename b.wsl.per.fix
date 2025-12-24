@@ -13,7 +13,7 @@ wsl_permissions_fix_exists () {
 	fi
 }
 
-wsl.per.fix () {
+wsl_per_fix () {
 
 	if [ ! -n "${SUDO_USER}" ]; then
 		echo -e "\e[91mProblem\e[0m: did not run '${0}' with sudo"
@@ -40,4 +40,4 @@ wsl.per.fix () {
 	fi
 }
 
-wsl.per.fix
+wsl_per_fix

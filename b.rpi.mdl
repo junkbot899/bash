@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+br="\033[91m"
+bg="\033[92m"
+bb="\033[94m"
+ef="\033[0m"
+
+rpi_mdl () {
+    echo -e "${br}rpi - model${ef}"
+    cat /sys/firmware/devicetree/base/model
+    echo ""
+}
+
+rpi_mdl

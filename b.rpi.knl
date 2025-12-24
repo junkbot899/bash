@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+br="\033[91m"
+bg="\033[92m"
+bb="\033[94m"
+ef="\033[0m"
+
+rpi_knl () {
+    echo -e "${br}rpi - kernel${ef}"
+    uname -m
+}
+
+rpi_knl

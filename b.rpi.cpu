@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+br="\033[91m"
+bg="\033[92m"
+bb="\033[94m"
+ef="\033[0m"
+
+rpi_cpu () {
+    echo -e "${br}rpi - cpu/s${ef}"
+    cat /proc/cpuinfo
+}
+
+rpi_cpu

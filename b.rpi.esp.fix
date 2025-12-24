@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+br="\033[91m"
+bg="\033[92m"
+bb="\033[94m"
+ef="\033[0m"
+
+rpi_esp_fix () {
+    echo -e "${bb}rpi${ef} - esp32 fix - ${bg}start${ef}"
+    sudo apt install python3 python3-pip python3-setuptools python3-venv
+    /home/"${USER}"/.espressif/python_env/idf6.1_py3.13_env/bin/python -m pip install --upgrade ruamel.yaml.clib
+    echo -e "${bb}rpi${ef} - esp32 fix - ${bb}end${ef}"
+}
+
+rpi_esp_fix

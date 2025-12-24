@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+br="\033[91m"
+bg="\033[92m"
+bb="\033[94m"
+ef="\033[0m"
+
+rpi_hwi () {
+    b.rpi.mdl
+    b.rpi.os
+    b.rpi.knl
+    b.rpi.cpu
+    b.rpi.mem
+}
+
+rpi_hwi

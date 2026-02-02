@@ -1,0 +1,7 @@
+These checks look if telnet (insecure) is running on Linux
+
+sudo ss -tulpn | grep ':23'
+
+systemctl status telnet.socket
+systemctl status telnet.service
+

@@ -1,0 +1,108 @@
+Ubuntu 24.04.3 (“Noble Numbat”) is already one of the more secure LTS releases, but a default install still exposes several network‑related areas that should be hardened—especially if your system is on a home network in the Sunshine Coast or exposed to the wider internet. The most important steps involve tightening SSH, firewalling unused services, enabling automatic updates, and applying CIS‑aligned hardening. 
+🔐 Key Network‑Related Vulnerabilities & How to Harden Them
+1. Open or Unnecessary Network Services
+
+Ubuntu ships with a few services that listen on the network (e.g., Avahi/mDNS).
+These aren’t “vulnerabilities” by default, but any listening service increases attack surface.
+Harden:
+
+    Disable Avahi if you don’t use .local hostname discovery:
+    bash
+
+    sudo systemctl disable --now avahi-daemon.service avahi-daemon.socket
+
+    Audit listening ports:
+    bash
+
+    sudo ss -tulpn
+
+2. SSH Exposure (Most Common Attack Vector)
+
+Automated SSH attacks begin within minutes of being online.
+Hardening SSH is essential. 
+Harden:
+
+    Disable password login (use keys only)
+
+    Change SSH port (optional but reduces noise)
+
+    Install Fail2Ban to block brute‑force attempts:
+    bash
+
+    sudo apt install fail2ban
+
+3. Firewall Not Enabled by Default
+
+Ubuntu includes UFW but does not enable it automatically.
+A system without a firewall is more exposed to scanning and exploitation. 
+Harden:
+bash
+
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw enable
+
+4. Lack of Automatic Security Updates
+
+Unpatched systems are the #1 cause of compromise.
+Ubuntu supports unattended security updates, but they must be enabled. 
+Harden:
+bash
+
+sudo apt install unattended-upgrades
+sudo dpkg-reconfigure unattended-upgrades
+
+5. Weak Application Confinement
+
+Ubuntu 24.04 uses AppArmor 4.0, which significantly improves sandboxing—but only if profiles are enforced. 
+Harden:
+
+    Check AppArmor status:
+    bash
+
+    sudo aa-status
+
+    Ensure key services (e.g., SSH, systemd-resolved, cups) are in enforce mode.
+
+6. Missing CIS Benchmark Hardening
+
+Canonical provides Ubuntu Security Guide (USG) with CIS profiles for 24.04.
+These apply industry‑standard hardening automatically. 
+Harden:
+bash
+
+sudo snap install ubuntu-security-guide
+sudo usg audit cis_level1_server
+sudo usg apply cis_level1_server
+
+7. Insufficient Logging & Auditing
+
+Without proper logs, detecting intrusions is difficult.
+Harden:
+
+    Enable system auditing:
+    bash
+
+    sudo apt install auditd
+    sudo systemctl enable --now auditd
+
+    Configure log rotation and remote log forwarding if needed.
+
+🛡️ Recommended Hardening Checklist (Network‑Focused)
+Area	Action	Benefit
+Firewall	Enable UFW	Blocks unsolicited traffic
+SSH	Keys only, Fail2Ban	Stops brute‑force attacks
+Services	Disable Avahi & unused daemons	Reduces attack surface
+Updates	Enable unattended upgrades	Fixes vulnerabilities quickly
+AppArmor	Enforce profiles	Contains compromised apps
+CIS Hardening	Apply USG profiles	Industry‑grade security baseline
+Auditing	Enable auditd	Detects suspicious activity
+🧭 Want a tailored hardening plan?
+
+If you tell me:
+
+    whether your Ubuntu system is desktop, server, or internet‑exposed,
+
+    and what services you run (if any),
+
+I can generate a precise hardening profile suited to your setup on the Sunshine Coast.

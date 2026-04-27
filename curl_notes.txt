@@ -1,0 +1,19 @@
+CURL NOTES
+
+POST
+
+endpoint="/endpoint"
+
+data="
+{
+	\"property\": \"value\"
+}
+"
+
+curl -L -X POST "${url}${endpoint}" \
+	-H "Authorization: Basic ${AUTH}" \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d "${data}" \
+	-w "\n${http_code}\n"
+

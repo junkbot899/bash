@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+ok="\033[30m"
+or="\033[31m"
+og="\033[32m"
+oy="\033[33m"
+ob="\033[34m"
+om="\033[35m"
+oc="\033[36m"
+ow="\033[37m"
+
+bk="\033[90m"
+br="\033[91m"
+bg="\033[92m"
+by="\033[93m"
+bb="\033[94m"
+bm="\033[95m"
+bc="\033[96m"
+bw="\033[97m"
+
+ef="\033[0m"
+
+eco_clr_dmo () {
+	echo -e "30 - ${ok}black${ef}"
+	echo -e "31 - ${or}red${ef}"
+	echo -e "32 - ${og}green${ef}"
+	echo -e "33 - ${oy}yellow${ef}"
+	echo -e "34 - ${ob}blue${ef}"
+	echo -e "35 - ${om}magenta${ef}"
+	echo -e "36 - ${oc}cyan${ef}"
+	echo -e "37 - ${ow}white${ef}"
+	
+	echo -e "90 - ${bk}bright black${ef}"
+	echo -e "91 - ${br}bright red${ef}"
+	echo -e "92 - ${bg}bright green${ef}"
+	echo -e "99 - ${by}bright yellow${ef}"
+	echo -e "94 - ${bb}bright blue${ef}"
+	echo -e "95 - ${bm}bright magenta${ef}"
+	echo -e "96 - ${bc}bright cyan${ef}"
+	echo -e "97 - ${bw}bright white${ef}"
+}
+
+eco_clr_dmo

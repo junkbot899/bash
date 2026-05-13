@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+br="\033[91m"
+bg="\033[92m"
+bb="\033[94m"
+ef="\033[0m"
+
+vlc_fix () {
+    echo -e "${br}vlc${ef} - fix"
+    sudo apt install --reinstall libdvd-pkg libdvdnav4 libdvdread8 vlc -y
+    sudo dpkg-reconfigure libdvd-pkg
+}
+
+vlc_fix

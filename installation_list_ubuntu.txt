@@ -1,0 +1,6 @@
+INSTALLATION LIST - UBUNTU
+
+# vim - cli text editor
+sudo apt install vim
+# git - version control system
+sudo apt install git

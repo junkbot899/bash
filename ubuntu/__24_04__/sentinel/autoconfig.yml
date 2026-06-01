@@ -1,0 +1,35 @@
+autoinstall:
+  version: 1
+
+  identity:
+    hostname: SENTINEL
+    username: boss
+    ssh:
+      install-server: true
+
+  ssh:
+    install-server: true
+    allow-pw: false
+    disable_root: true
+
+  packages:
+    - git
+    - inkscape
+    - octave
+    - vim
+
+  storage:
+    # swap file - 4GB
+    layout:
+      name: direct
+      swap:
+        size: 4096
+
+  user-data:
+    disable_root: false
+    # Enable GRUB
+    bootcmd:
+      - sed -i 's/GRUB_TIMEOUT_STYLE=hidden/GRUB_TIMEOUT_STYLE=menu' /etc/default/grub
+      - sed -i 's/GRUB_TIMEOUT=0/GRUB_TIMEOUT=10' /etc/default/grub
+      - update-grub
+

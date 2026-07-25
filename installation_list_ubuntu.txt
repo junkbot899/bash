@@ -11,5 +11,8 @@ sudo apt install python3.12-venv
 # tmux - split terminal ui for cli
 sudo apt install tmux -y
 # productivity apps libre office
--
-
+# Inkscape, graphic design.
+sudo apt update
+sudo apt install inkscape
+# Blender 3D Graphics object editor.
+sudo apt install blender

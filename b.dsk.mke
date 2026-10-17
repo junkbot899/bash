@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+ndisk="WINDOWS10.virtual.usb"
+tmnt="/mnt/${ndisk}"
+pdisk=/media/"${USER}"/WINDOWS10
+vdisk=/var/lib/libvirt/images/"${ndisk}"
+
+# 01
+# Create a blank file.
+# The 1M = 1MiB = 1,048,576 bytes
+# dd - does not work
+# sudo dd if=/dev/zero of="${vdisk}" bs=1M count=16000
+sudo truncate -s 16G "${vdisk}"
+
+# 02
+# Get the loop number.
+loopN=$(sudo losetup --find --show "${vdisk}")
+# Should show something like:
+#   /dev/loopN
+
+# 03
+# With the loop create:
+# MBR Partition table.
+# Make bootable.
+# FAT32 Partition.
+sudo parted "${loopN}" mklabel msdos
+sudo parted /dev/loop19 --script mkpart primary fat32 1MiB 100%
+# Does not work
+# sudo parted -a optimal "${loopN}" mkpart primary fat32 1MiB 100%
+sudo parted "${loopN}" set 1 boot on
+
+# 04
+# Format the partition as fat32.
+dmnt="${loopN}p1"
+sudo mkfs.vfat -F 32 "${dmnt}"
+
+# 05
+# Copy the USB installer contents.
+sudo mkdir "${tmnt}"
+sudo mount "${dmnt}" "${tmnt}"
+sudo cp -r "${pdisk}/*" "${tmnt}"
+sync
+sudo umount "${tmnt}"
+
+# 06
+# Detach the loop device.
+sudo losetup -d "${loopN}"
+

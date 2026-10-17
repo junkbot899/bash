@@ -16,3 +16,6 @@ sudo apt update
 sudo apt install inkscape
 # Blender 3D Graphics object editor.
 sudo apt install blender
+# Virtualbox for VMs.
+sudo apt install virtualbox
+sudo usermod -aG vboxusers $USER

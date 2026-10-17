@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+# Verify KVM is active.
+LC_ALL=C lscpu | grep Virtualization
+# You should see output.
+# Virtualization: VT-x
+
+# Check KVM modules
+lsmod | grep kvm
+# You should see output.
+# kvm_intel
+# kvm
+
+# ---
+
+# Enable USB passthrough.
+sudo apt install usbredirhost1
+sudo apt install usbredirparser1
+
+# ---
+
+# Launch virtual manager.
+virt-manager
+
+# ---
+
+# Create VM profile.
+# Create a new VM:
+# 
+#     New VM
+# 
+#     Choose Local ISO → select your Windows 10 ISO
+# 
+#     Set:
+# 
+#         CPU: 4 cores
+# 
+#         RAM: 8–16 GB
+# 
+#     Under CPU configuration:
+# 
+#         Set host‑passthrough (critical for performance)
+# 
+#     Under Display:
+# 
+#         Set Video model: virtio‑gpu
+# 
+#         Set Display server: Spice
+# 
+#     Under Storage:
+# 
+#         Use virtio‑disk (fastest)
+#
+#     VM → Details → Add Hardware → USB Host Device
+
+
+
